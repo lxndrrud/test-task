@@ -1,0 +1,56 @@
+version: "3"
+services:
+  database:
+    container_name: "test-task-db"
+    image: "postgres:13-alpine"
+    restart: "unless-stopped"
+    ports:
+      - "7432:5432"
+    networks:
+      - "task_network"
+    environment:
+      POSTGRES_PASSWORD: "taskpassw0rd"
+      POSTGRES_USER: "taskuser"
+      POSTGRES_DB: "taskdb"
+
+  user-service:
+    container_name: "user-service"
+    build:
+      context: "./user-service"
+      dockerfile: "Dockerfile.dev"
+    networks:
+      - "task_network"
+    ports:
+      - "4001:3000"
+    volumes:
+      - "./user-service:/var/www/user-service"
+    environment:
+      DB_PASSWORD: "taskpassw0rd"
+      DB_USER: "taskuser"
+      DB_NAME: "taskdb"
+      DB_HOST: "test-task-db"
+      DB_PORT: "5432"
+      DB_SCHEMA: "user_service"
+
+  user-history-service:
+    container_name: "user-history-service"
+    build:
+      context: "./user-history-service"
+      dockerfile: "Dockerfile.dev"
+    networks:
+      - "task_network"
+    ports:
+      - "4002:3000"
+    volumes:
+      - "./user-history-service:/var/www/user-history-service"
+    environment:
+      DB_PASSWORD: "taskpassw0rd"
+      DB_USER: "taskuser"
+      DB_NAME: "taskdb"
+      DB_HOST: "test-task-db"
+      DB_PORT: "5432"
+      DB_SCHEMA: "user_history_service"
+
+networks:
+  task_network:
+    external: False
