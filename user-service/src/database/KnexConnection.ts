@@ -1,8 +1,10 @@
 import knex from 'knex';
 import { ConfigProvider } from 'src/config/config-provider/config-provider';
 
+export const KNEX_CONNECTION = 'KNEX_CONNECTION';
+
 export const KnexConnection = {
-  provide: 'KNEX_CONNECTION',
+  provide: KNEX_CONNECTION,
   inject: [ConfigProvider],
   useFactory: (config: ConfigProvider) => {
     return knex({

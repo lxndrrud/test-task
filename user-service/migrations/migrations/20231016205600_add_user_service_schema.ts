@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  knex.schema.createSchemaIfNotExists('user_service');
+  return knex.schema.createSchema('user_service');
 }
 
 export async function down(knex: Knex): Promise<void> {
-  knex.schema.dropSchema('user_service');
+  return knex.schema.dropSchemaIfExists('user_service');
 }

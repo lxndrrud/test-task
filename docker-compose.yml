@@ -31,6 +31,8 @@ services:
       DB_HOST: "test-task-db"
       DB_PORT: "5432"
       DB_SCHEMA: "user_service"
+    depends_on:
+      - database
 
   user-history-service:
     container_name: "user-history-service"
@@ -50,6 +52,8 @@ services:
       DB_HOST: "test-task-db"
       DB_PORT: "5432"
       DB_SCHEMA: "user_history_service"
+    depends_on:
+      - database
 
 networks:
   task_network:

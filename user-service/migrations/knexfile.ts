@@ -19,7 +19,7 @@ const config: { [key: string]: Knex.Config } = {
     migrations: {
       tableName: 'knex_migrations',
     },
-    searchPath: 'user_service',
+    searchPath: ['public'],
   },
 };
 
