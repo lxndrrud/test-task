@@ -9,7 +9,9 @@ export function UserHistoryRouterBootstrap() {
   const service = new UserHistoryService(repo);
   const controller = new UserHistoryController(service);
 
-  subrouter.get("/", controller.getById.bind(controller));
+  subrouter.post("/", controller.createHistoryRecord.bind(controller));
+
+  subrouter.get("/", controller.getHistoryRecords.bind(controller));
 
   return subrouter;
 }

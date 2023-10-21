@@ -1,6 +1,6 @@
 FROM node:18-alpine3.17
-WORKDIR /var/www/user-service
-COPY ./ /var/www/user-service
+WORKDIR /var/www/user-history-service
+COPY ./ /var/www/user-history-service
 #RUN npm i
 ENTRYPOINT ["npm", "run", "dev"]
 EXPOSE 3000
