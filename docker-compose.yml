@@ -31,6 +31,7 @@ services:
       DB_HOST: "test-task-db"
       DB_PORT: "5432"
       DB_SCHEMA: "user_service"
+      HISTORY_SERVICE_URL: "http://user-history-service:3000"
     depends_on:
       - database
 

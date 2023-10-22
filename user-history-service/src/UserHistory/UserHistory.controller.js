@@ -24,8 +24,10 @@ export class UserHistoryController {
 
     try {
       await this.userHistoryService.createHistoryRecords(value);
-      res.status(200).end();
+      res.status(201).end();
+      console.log("OK", payload);
     } catch (error) {
+      console.log("NOT OK", payload);
       this.errorHandler.internalError500(res, error);
     }
   }
@@ -36,11 +38,11 @@ export class UserHistoryController {
    */
   async getHistoryRecords(req, res) {
     const tableName = req.query.tableName;
-    if (!tableName)
-      return this.errorHandler.badRequest400(
-        res,
-        "Не указано название таблицы!"
-      );
+    // if (!tableName)
+    // return this.errorHandler.badRequest400(
+    //   res,
+    //   "Не указано название таблицы!"
+    // );
     const entityId = req.query.entityId;
     if (!entityId)
       return this.errorHandler.badRequest400(

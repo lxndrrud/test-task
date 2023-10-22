@@ -34,7 +34,12 @@ export class UserHistoryService {
    * @param {number} page
    * @param {number} limit
    */
-  async getHistoryRecords(tableName, entityId, page = 1, limit = 10) {
+  async getHistoryRecords(
+    tableName = "user_service.users",
+    entityId,
+    page = 1,
+    limit = 10
+  ) {
     const [records, count] = await Promise.all([
       this.userHistoryRepo.getHistoryRecord(tableName, entityId, page, limit),
       this.userHistoryRepo.countHistoryRecords(tableName, entityId),
@@ -45,7 +50,7 @@ export class UserHistoryService {
         currentPage: page,
         lastPage: Math.floor(count / limit) + 1,
         pageLimit: limit,
-        count: count,
+        recordsCount: count,
       },
       records,
     };

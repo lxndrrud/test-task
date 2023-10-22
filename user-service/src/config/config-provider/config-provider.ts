@@ -8,4 +8,5 @@ export class ConfigProvider {
   public readonly databasePassword = process.env.DB_PASSWORD;
   public readonly databaseName = process.env.DB_NAME;
   public readonly databaseSchema = process.env.DB_SCHEMA;
+  public readonly historyServiceUrl = process.env.HISTORY_SERVICE_URL;
 }

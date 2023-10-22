@@ -13,9 +13,9 @@ export const HistoryRecordArrayCreateDtoSchema = Joi.array().items(
 );
 
 export const HistoryRecordGetAllDtoSchema = Joi.object({
-  tableName: Joi.string().required(),
+  tableName: Joi.string(),
   columnName: Joi.string().required(),
   entityId: Joi.number().required(),
-  page: Joi.number().min(1),
-  limit: Joi.number().min(10),
+  page: Joi.number().min(1).default(1),
+  limit: Joi.number().min(10).default(10),
 });
