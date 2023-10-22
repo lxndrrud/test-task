@@ -8,9 +8,9 @@ async function bootstrap() {
 
   const userHistorySubrouter = UserHistoryRouterBootstrap();
 
-  app.use("/", userHistorySubrouter);
-
   app.use(bodyParser.json());
+
+  app.use("/", userHistorySubrouter);
 
   app.listen(3000, () => console.log("Application started!"));
 }

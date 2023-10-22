@@ -1,3 +1,5 @@
+import { HistoryRecordArrayCreateDtoSchema } from "./dto/HistoryRecord.dto.js";
+
 export class UserHistoryController {
   /**
    * @param {import('./user-history-service/UserHistory.service').UserHistoryService} userHistoryService
@@ -12,49 +14,17 @@ export class UserHistoryController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async createHistoryRecord(req, res) {
-    /** @type {string | undefined} */
-    const tableName = req.body.tableName;
-    if (!tableName)
-      return this.errorHandler.badRequest400(
-        res,
-        "Не указано название таблицы!"
-      );
-    /** @type {string | undefined} */
-    const columnName = req.body.columnName;
-    if (!columnName)
-      return this.errorHandler.badRequest400(
-        res,
-        "Не указано название столбца!"
-      );
-    let oldValue, newValue;
-    try {
-      oldValue = JSON.parse(req.body.oldValue);
-      newValue = JSON.parse(req.body.newValue);
-      if (!newValue)
-        return this.errorHandler.badRequest400(
-          res,
-          "Не указано новое значение!"
-        );
-    } catch (error) {
-      return this.errorHandler.internalError500();
-    }
-
-    const entityId = Number(req.body.entityId);
-    if (!entityId)
-      return this.errorHandler.badRequest400(
-        res,
-        "Не указан идентификатор записи!"
-      );
+  async createHistoryRecords(req, res) {
+    const payload = req.body.payload;
+    if (!payload)
+      return this.errorHandler.badRequest400(res, "Не указано тело запроса!");
+    const { error, value } =
+      HistoryRecordArrayCreateDtoSchema.validate(payload);
+    if (error) return this.errorHandler.badRequest400(res, error);
 
     try {
-      await this.userHistoryService.createHistoryRecord(
-        tableName,
-        columnName,
-        oldValue,
-        newValue,
-        entityId
-      );
+      await this.userHistoryService.createHistoryRecords(value);
+      res.status(200).end();
     } catch (error) {
       this.errorHandler.internalError500(res, error);
     }
@@ -65,27 +35,31 @@ export class UserHistoryController {
    * @param {import('express').Response} res
    */
   async getHistoryRecords(req, res) {
-    /** @type {string | undefined} */
-    const tableName = req.body.tableName;
+    const tableName = req.query.tableName;
     if (!tableName)
       return this.errorHandler.badRequest400(
         res,
         "Не указано название таблицы!"
       );
-
-    /** @type {string | undefined} */
-    const columnName = req.body.columnName;
-    if (!columnName)
-      return this.errorHandler.badRequest400(
-        res,
-        "Не указано название столбца!"
-      );
-
-    const entityId = Number(req.body.entityId);
+    const entityId = req.query.entityId;
     if (!entityId)
       return this.errorHandler.badRequest400(
         res,
-        "Не указан идентификатор записи!"
+        "Не указан идентификатор сущности!"
       );
+    const page = Number(req.query.currentPage);
+    const limit = Number(req.query.pageLimit);
+
+    try {
+      const result = await this.userHistoryService.getHistoryRecords(
+        tableName,
+        entityId,
+        page || undefined,
+        limit || undefined
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      this.errorHandler.internalError500(res, error);
+    }
   }
 }
