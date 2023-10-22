@@ -17,3 +17,5 @@ sudo docker-compose up -d
 ## Миграции базы данных
 
 sh migrate-latest.sh
+
+## Документация API находится в файле api_endpoints.xlsx
